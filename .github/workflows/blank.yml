@@ -25,7 +25,14 @@ jobs:
         run: |
           sudo apt-get update -qy
           sudo apt-get install -y curl jq maven npm gnupg
+          
+          # Add the Google Cloud SDK distribution URI as a package source
           echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+
+          # Import the Google Cloud SDK public key
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+          
+          # Update and install the Google Cloud SDK
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk
 
       - name: Save GCP service account key
