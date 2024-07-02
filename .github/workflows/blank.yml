@@ -25,27 +25,14 @@ jobs:
         run: |
           sudo apt-get update -qy
           sudo apt-get install -y curl jq maven npm gnupg
-          
-          # Add the Google Cloud SDK distribution URI as a package source
-          echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-
-          # Import the Google Cloud SDK public key
           curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
-          
-          # Update and install the Google Cloud SDK
+          echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk
 
-      - name: Save GCP service account key
+      - name: Download service account key
         run: |
           mkdir -p .secure_files
-          echo "${{ secrets.GCP_SA_KEY }}" > .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
-
-      - name: Download secure files
-        env:
-          GITLAB_AUTH_TOKEN: ${{ secrets.GITLAB_AUTH_TOKEN }}  # Adjust token name as per requirement
-        run: |
-          curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
-          download-secure-files --auth-token $GITLAB_AUTH_TOKEN
+          curl -o .secure_files/abacus-apigee-demo-a9fffc7cc15c.json https://example.com/abacus-apigee-demo-a9fffc7cc15c.json
 
       - name: Execute custom script
         run: |
