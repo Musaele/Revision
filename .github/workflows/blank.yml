@@ -36,7 +36,7 @@ jobs:
       - name: Write service account key to file
         run: |
           mkdir -p .secure_files
-          echo "${{ secrets.GCP_SA_KEY }}" > .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
+          echo "${{ secrets.GCP_SA_KEY }}" | jq . > .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
 
       - name: Verify service account key
         run: |
