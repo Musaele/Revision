@@ -34,6 +34,11 @@ jobs:
           mkdir -p .secure_files
           curl -o .secure_files/abacus-apigee-demo-a9fffc7cc15c.json https://example.com/abacus-apigee-demo-a9fffc7cc15c.json
 
+      - name: Verify service account key
+        run: |
+          echo "Service account key content:"
+          cat .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
+
       - name: Execute custom script
         run: |
           source ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
