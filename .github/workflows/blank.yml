@@ -18,6 +18,7 @@ jobs:
       - name: Set up JDK 11
         uses: actions/setup-java@v3  # Updated to the latest version
         with:
+          distribution: 'adopt'  # Specify the distribution
           java-version: 11
 
       - name: Install dependencies
@@ -94,3 +95,4 @@ jobs:
 #         echo "stable revision at stage integration_test: $stable_revision_number"
 #         cd ${{ github.workspace }}  # Set the working directory to the project root
 #         bash ./undeploy.sh ${{ secrets.ORG }} $base64encoded ${{ secrets.PROXY_NAME }} $stable_revision_number ${{ secrets.APIGEE_ENVIRONMENT }}
+``
