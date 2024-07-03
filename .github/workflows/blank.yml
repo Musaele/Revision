@@ -29,10 +29,10 @@ jobs:
           echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
           sudo apt-get update && sudo apt-get install -y google-cloud-sdk
 
-      - name: Write service account key to file
+      - name: Decode and write service account key to file
         run: |
           mkdir -p .secure_files
-          echo "${{ secrets.GCP_SA_KEY }}" > .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
+          echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
 
       - name: Verify service account key
         run: |
