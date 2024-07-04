@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]  # Ensure all actions use Node.js 20
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -100,4 +97,5 @@ jobs:
         run: |
           mvn clean install -e -X -f ${{ github.workspace }}/test-call/pom.xml \
             -Dorg=${{ secrets.ORG }} \
-            -Dbearer=$access_token
+            -Dapigee.environment=${{ secrets.APIGEE_ENVIRONMENT }} \
+            -Dproxy.name=${{ secrets.PROXY_NAME }}
