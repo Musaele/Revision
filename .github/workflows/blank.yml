@@ -78,9 +78,9 @@ jobs:
           name: build-env
           path: .secure_files
 
-      - name: Debug: List directory contents
-        run: |
-          ls -l .secure_files
+      # - name: Debug: List directory contents
+      #   run: |
+      #     ls -l .secure_files
 
       - name: Debug: Display build.env contents
         run: |
