@@ -44,16 +44,10 @@ jobs:
           echo "Service account key file content:"
           cat .secure_files/service-account.json
 
-      - name: Authenticate with GCP
+      - name: Execute revision.sh script to obtain access token and stable revision number
         run: |
-          gcloud auth activate-service-account --key-file=.secure_files/service-account.json
-          gcloud config set project abacus-apigee-demo
-
-      - name: Execute custom script
-        run: |
-          source ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
-          echo "access_token=$access_token" >> .secure_files/build.env
-          echo "stable_revision_number=$stable_revision_number" >> .secure_files/build.env
+          chmod +x ./revision.sh
+          ./revision.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
         env:
           ORG: ${{ secrets.ORG }}
           PROXY_NAME: ${{ secrets.PROXY_NAME }}
@@ -78,11 +72,7 @@ jobs:
           name: build-env
           path: .secure_files
 
-      # - name: Debug: List directory contents
-      #   run: |
-      #     ls -l .secure_files
-
-      - name: Debug Display build.env contents
+      - name: Display build.env contents
         run: |
           cat .secure_files/build.env
 
@@ -90,7 +80,7 @@ jobs:
         run: |
           source .secure_files/build.env
           echo "Access token at stage deploy: $access_token"
-          echo "stable revision at stage deploy: $stable_revision_number"
+          echo "Stable revision at stage deploy: $stable_revision_number"
 
       - name: Verify POM file path
         run: |
