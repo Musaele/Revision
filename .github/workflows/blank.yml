@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]  # Ensure all actions use Node.js 20
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -44,10 +47,16 @@ jobs:
           echo "Service account key file content:"
           cat .secure_files/service-account.json
 
-      - name: Execute revision.sh script to obtain access token and stable revision number
+      - name: Authenticate with GCP
         run: |
-          chmod +x ./revision.sh
-          ./revision.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
+          gcloud auth activate-service-account --key-file=.secure_files/service-account.json
+          gcloud config set project abacus-apigee-demo
+
+      - name: Execute custom script
+        run: |
+          source ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
+          echo "access_token=$access_token" >> .secure_files/build.env
+          echo "stable_revision_number=$stable_revision_number" >> .secure_files/build.env
         env:
           ORG: ${{ secrets.ORG }}
           PROXY_NAME: ${{ secrets.PROXY_NAME }}
@@ -72,7 +81,7 @@ jobs:
           name: build-env
           path: .secure_files
 
-      - name: Display build.env contents
+      - name: Debug Display build.env contents
         run: |
           cat .secure_files/build.env
 
