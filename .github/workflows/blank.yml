@@ -96,8 +96,8 @@ jobs:
           echo "Verifying POM file path..."
           ls -l ${{ github.workspace }}/test-call
 
-      - name: Maven build
+      - name: Maven build with debug output
         run: |
-          mvn clean install -f ${{ github.workspace }}/test-call/pom.xml \
+          mvn clean install -e -X -f ${{ github.workspace }}/test-call/pom.xml \
             -Dorg=${{ secrets.ORG }} \
             -Dbearer=$access_token
