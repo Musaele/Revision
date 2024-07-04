@@ -32,16 +32,18 @@ jobs:
       - name: Decode and write service account key to file
         run: |
           mkdir -p .secure_files
-          echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > .secure_files/service-account.json
+          echo "${{ secrets.GCP_SA_KEY_BASE64 }}" | base64 --decode > .secure_files/abacus-apigee-demo-a9fffc7cc15c.json || exit 1
+          ls -l .secure_files  # Debug output: List files in .secure_files directory
+          cat .secure_files/abacus-apigee-demo-a9fffc7cc15c.json  # Debug output: Display content of the key file
 
       - name: Verify service account key
         run: |
           echo "Service account key content:"
-          cat .secure_files/service-account.json
+          cat .secure_files/abacus-apigee-demo-a9fffc7cc15c.json
 
       - name: Authenticate with GCP
         run: |
-          gcloud auth activate-service-account --key-file=.secure_files/service-account.json
+          gcloud auth activate-service-account --key-file=.secure_files/abacus-apigee-demo-a9fffc7cc15c.json
           gcloud config set project abacus-apigee-demo
 
       - name: Execute custom script
@@ -53,7 +55,7 @@ jobs:
           ORG: ${{ secrets.ORG }}
           PROXY_NAME: ${{ secrets.PROXY_NAME }}
           APIGEE_ENVIRONMENT: ${{ secrets.APIGEE_ENVIRONMENT }}
-    
+
       - name: Save build artifacts
         uses: actions/upload-artifact@v3
         with:
