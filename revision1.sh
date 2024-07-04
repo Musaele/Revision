@@ -9,7 +9,7 @@ echo "ProxyName: $ProxyName"
 echo "ENV: $ENV"
 
 # Set the path to your service account JSON key file
-KEY_FILE=".secure_files/abacus-apigee-demo-a9fffc7cc15c.json"
+KEY_FILE=".secure_files/service-account.json"
 
 echo "$KEY_FILE"
 
