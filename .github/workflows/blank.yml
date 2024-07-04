@@ -78,10 +78,6 @@ jobs:
           name: build-env
           path: .secure_files
 
-      # - name: Debug: List directory contents
-      #   run: |
-      #     ls -l .secure_files
-
       - name: Display build.env contents
         run: |
           cat .secure_files/build.env
@@ -100,6 +96,6 @@ jobs:
       - name: Maven build
         run: |
           mvn clean install -f ${{ github.workspace }}/test-call/pom.xml \
-            -P${{ secrets.APIGEE_ENVIRONMENT }} \
+            -P${{ secrets.APIGEE_ENVIRONMENT || 'default-environment' }} \
             -Dorg=${{ secrets.ORG }} \
             -Dbearer=$access_token
