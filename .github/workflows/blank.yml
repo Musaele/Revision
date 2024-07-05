@@ -67,7 +67,6 @@ jobs:
           ORG: ${{ env.ORG }}
           PROXY_NAME: ${{ env.PROXY_NAME }}
           APIGEE_ENVIRONMENT: ${{ env.APIGEE_ENVIRONMENT }}
-        continue-on-error: true  # Ensure script execution continues even if it fails
 
   deploy:
     runs-on: ubuntu-latest
@@ -80,10 +79,22 @@ jobs:
         run: |
           echo "Access token before Maven build and deploy: ${{ needs.build.outputs.access_token }}"
 
+      - name: Debug environment variables
+        run: |
+          echo "ORG: ${{ env.ORG }}"
+          echo "PROXY_NAME: ${{ env.PROXY_NAME }}"
+          echo "APIGEE_ENVIRONMENT: ${{ env.APIGEE_ENVIRONMENT }}"
+          echo "Access token: ${{ needs.build.outputs.access_token }}"
+
+      - name: List root directory contents
+        run: |
+          ls -al ${{ github.workspace }}
+          ls -al ${{ github.workspace }}/test-call
+
       - name: Maven build and deploy
         run: |
           mvn clean install -f ${{ github.workspace }}/test-call/pom.xml \
-            -Dorg=${{ secrets.ORG }} \
+            -Dorg=${{ env.ORG }} \
             -Dapigee.environment=${{ env.APIGEE_ENVIRONMENT }} \
             -Dproxy.name=${{ env.PROXY_NAME }} \
             -Dbearer=${{ needs.build.outputs.access_token }} -e -X
