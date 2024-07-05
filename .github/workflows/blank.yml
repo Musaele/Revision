@@ -72,10 +72,10 @@ jobs:
       - name: Echo Output  
         run: echo "access_token=${{needs.build.outputs.output1}}" >> $GITHUB_ENV
        
-      - name: Verify POM file path
-        run: |
-          echo "Verifying POM file path..."
-          ls -l ${{ github.workspace }}/${{ env.PROXY_NAME }}/pom.xml
+      #- name: Verify POM file path
+        #run: |
+          #echo "Verifying POM file path..."
+          #ls -l ${{ github.workspace }}/${{ env.PROXY_NAME }}/pom.xml
 
       - name: Maven build and deploy
         run: |
