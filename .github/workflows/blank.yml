@@ -7,7 +7,11 @@ on:
   pull_request:
     branches:
       - main
-
+env:
+  ORG: 'abacus-apigee-demo'
+  PROXY_NAME: 'test-call'
+  APIGEE_ENVIRONMENT: 'dev2'
+  
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,55 +48,23 @@ jobs:
           echo "Service account key file content:"
           cat .secure_files/service-account.json
 
-      - name: Authenticate with GCP
-        run: |
-          gcloud auth activate-service-account --key-file=.secure_files/service-account.json
-          gcloud config set project abacus-apigee-demo
-
       - name: Make revision1.sh executable
         run: |
           chmod +x ./revision1.sh
 
       - name: Execute custom script
         run: |
-          ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
+          ./revision1.sh ${{ env.ORG }} ${{ env.PROXY_NAME }} ${{ env.APIGEE_ENVIRONMENT }}
         env:
-          ORG: ${{ secrets.ORG }}
-          PROXY_NAME: ${{ secrets.PROXY_NAME }}
-          APIGEE_ENVIRONMENT: ${{ secrets.APIGEE_ENVIRONMENT }}
-
-      - name: Save build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-env
-          path: .secure_files/build.env
-
+          ORG: ${{ env.ORG }}
+          PROXY_NAME: ${{ env.PROXY_NAME }}
+          APIGEE_ENVIRONMENT: ${{ env.APIGEE_ENVIRONMENT }}
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: build-env
-          path: .secure_files
-
-      - name: Debug Display build.env contents
-        run: |
-          cat .secure_files/build.env
-
-      - name: Source build.env
-        run: |
-          source .secure_files/build.env
-          echo "Access token at stage deploy: $access_token"
-          echo "Stable revision at stage deploy: $stable_revision_number"
-
       - name: Echo access token
         run: |
-          source .secure_files/build.env
           echo "Access token before Maven build and deploy: $access_token"
 
       - name: Verify POM file path
@@ -102,10 +74,11 @@ jobs:
 
       - name: Maven build and deploy
         run: |
-          mvn clean install -f ${{ github.workspace }}/test-call/pom.xml \
+          mvn clean install -f ${{ github.workspace }}/${{ env.PROXY_NAME }}/pom.xml \
             -Dorg=${{ secrets.ORG }} \
-            -Dapigee.environment=${{ secrets.APIGEE_ENVIRONMENT }} \
-            -Dproxy.name=${{ secrets.PROXY_NAME }} -e -X
+            -Dapigee.environment=${{ env.APIGEE_ENVIRONMENT }} \
+            -Dproxy.name=${{ env.PROXY_NAME }} \
+            -Dbearer=${{ env.access_token }} -e -X
 
       - name: Verify deployment status
         run: |
