@@ -72,7 +72,7 @@ jobs:
     steps:
       - name: Echo access token
         run: |
-          echo "Access token before Maven build and deploy: ${{ env.access_token }}"
+          echo "Access token before Maven build and deploy: ${{ access_token }}"
       
       - name: Echo Output  
         run: echo "access_token=${{needs.build.outputs.output1}}" >> $GITHUB_ENV
