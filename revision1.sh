@@ -33,7 +33,6 @@ fi
 echo "Access Token: $access_token"
 
 # Save the access token in the environment file
-#echo "access_token=$access_token" > .secure_files/build.env
 echo "access_token=$access_token" >> $GITHUB_ENV
 
 # Get stable_revision_number using access_token
