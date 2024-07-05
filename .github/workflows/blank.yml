@@ -82,8 +82,7 @@ jobs:
 
       - name: Maven build and deploy
         run: |
-          mvn clean install -f ${{ github.workspace }}/test-call/pom.xml \
+          mvn clean install -f ${{ github.workspace }}/${{ env.PROXY_NAME }}/pom.xml \
             -Dorg=${{ env.ORG }} \
-            -Dapigee.environment=${{ env.APIGEE_ENVIRONMENT }} \
-            -Dproxy.name=${{ env.PROXY_NAME }} \
+            -P${{ env.APIGEE_ENVIRONMENT }} \
             -Dbearer=${{ needs.build.outputs.access_token }} -e -X
