@@ -75,7 +75,7 @@ jobs:
       - name: Verify POM file path
         run: |
           echo "Verifying POM file path..."
-          ls -l ${{ github.workspace }}/test-call
+          ls -l ${{ github.workspace }}/${{ env.PROXY_NAME }}/pom.xml
 
       - name: Maven build and deploy
         run: |
