@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 env:
   ORG: 'abacus-apigee-demo'
   PROXY_NAME: 'test-call'
@@ -72,17 +73,10 @@ jobs:
     steps:
       - name: Echo access token
         run: |
-          echo "Access token before Maven build and deploy: ${{ access_token }}"
+          echo "Access token before Maven build and deploy: ${{ needs.build.outputs.output1 }}"
       
       - name: Echo Output  
-        run: echo "access_token=${{needs.build.outputs.output1}}" >> $GITHUB_ENV
-
-      # Commented out block starts here
-      #- name: List directory contents
-      #  run: |
-      #    ls -al ${{ github.workspace }}
-      #    ls -al ${{ github.workspace }}/test-call
-      # Commented out block ends here
+        run: echo "access_token=${{ needs.build.outputs.output1 }}" >> $GITHUB_ENV
 
       - name: Maven build and deploy
         run: |
@@ -90,7 +84,7 @@ jobs:
             -Dorg=${{ secrets.ORG }} \
             -Dapigee.environment=${{ env.APIGEE_ENVIRONMENT }} \
             -Dproxy.name=${{ env.PROXY_NAME }} \
-            -Dbearer=${{ env.access_token }} -e -X
+            -Dbearer=${{ needs.build.outputs.output1 }} -e -X
 
       - name: Verify deployment status
         run: |
