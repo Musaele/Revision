@@ -71,7 +71,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Echo access token
-        run: echo "Access token before Maven build and deploy: ${{ needs.build.outputs.access_token }}"
+        run: echo "Access token before Maven build and deploy ${{ needs.build.outputs.access_token }}"
 
       - name: Debug environment variables
         run: |
