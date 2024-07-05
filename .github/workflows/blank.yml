@@ -51,10 +51,7 @@ jobs:
 
       - name: Execute custom script
         run: |
-          source ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
-          echo "access_token=$access_token" >> .secure_files/build.env
-          echo "stable_revision_number=$stable_revision_number" >> .secure_files/build.env
-          echo "Access token generated: $access_token"
+          ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
         env:
           ORG: ${{ secrets.ORG }}
           PROXY_NAME: ${{ secrets.PROXY_NAME }}
@@ -91,6 +88,7 @@ jobs:
 
       - name: Echo access token
         run: |
+          source .secure_files/build.env
           echo "Access token before Maven build and deploy: $access_token"
 
       - name: Verify POM file path
