@@ -20,7 +20,6 @@ if [ ! -f "$KEY_FILE" ]; then
 fi
 
 # Get the access token from Apigee
-
 gcloud auth activate-service-account --key-file="$KEY_FILE"
 access_token=$(gcloud auth print-access-token)
 
@@ -33,6 +32,9 @@ fi
 # Print the access token
 echo "Access Token: $access_token"
 
+# Save the access token in the environment file
+echo "access_token=$access_token" > .secure_files/build.env
+
 # Get stable_revision_number using access_token
 revision_info=$(curl -H "Authorization: Bearer $access_token" "https://apigee.googleapis.com/v1/organizations/$ORG/environments/$ENV/apis/$ProxyName/deployments")
 
@@ -40,8 +42,9 @@ revision_info=$(curl -H "Authorization: Bearer $access_token" "https://apigee.go
 if [ $? -eq 0 ]; then
     # Extract the revision number using jq, handling the case where .deployments is null or empty
     stable_revision_number=$(echo "$revision_info" | jq -r ".deployments[0]?.revision // null")
-
     echo "Stable Revision: $stable_revision_number"
+    # Save the stable revision number in the environment file
+    echo "stable_revision_number=$stable_revision_number" >> .secure_files/build.env
 else
     # Handle the case where the curl command failed
     echo "Error: Failed to retrieve API deployments."
