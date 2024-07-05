@@ -67,11 +67,15 @@ jobs:
           ORG: ${{ env.ORG }}
           PROXY_NAME: ${{ env.PROXY_NAME }}
           APIGEE_ENVIRONMENT: ${{ env.APIGEE_ENVIRONMENT }}
+        continue-on-error: true  # Ensure script execution continues even if it fails
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - name: Echo access token
         run: |
           echo "Access token before Maven build and deploy: ${{ needs.build.outputs.access_token }}"
