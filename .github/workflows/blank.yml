@@ -98,8 +98,3 @@ jobs:
             -Dapigee.environment=${{ env.APIGEE_ENVIRONMENT }} \
             -Dproxy.name=${{ env.PROXY_NAME }} \
             -Dbearer=${{ needs.build.outputs.access_token }} -e -X
-
-      - name: Verify deployment status
-        run: |
-          # Add verification steps here if necessary
-          echo "Deployment verification completed."
