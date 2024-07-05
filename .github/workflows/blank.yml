@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     outputs:
-      output1: ${{ steps.step1.outputs.access_token }}
+      access_token: ${{ steps.get_token.outputs.access_token }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -60,6 +60,7 @@ jobs:
           chmod +x ./revision1.sh
 
       - name: Execute custom script
+        id: get_token
         run: |
           ./revision1.sh ${{ env.ORG }} ${{ env.PROXY_NAME }} ${{ env.APIGEE_ENVIRONMENT }}
         env:
@@ -73,10 +74,10 @@ jobs:
     steps:
       - name: Echo access token
         run: |
-          echo "Access token before Maven build and deploy: ${{ needs.build.outputs.output1 }}"
+          echo "Access token before Maven build and deploy: ${{ needs.build.outputs.access_token }}"
       
       - name: Echo Output  
-        run: echo "access_token=${{ needs.build.outputs.output1 }}" >> $GITHUB_ENV
+        run: echo "access_token=${{ needs.build.outputs.access_token }}" >> $GITHUB_ENV
 
       - name: Maven build and deploy
         run: |
@@ -84,7 +85,7 @@ jobs:
             -Dorg=${{ secrets.ORG }} \
             -Dapigee.environment=${{ env.APIGEE_ENVIRONMENT }} \
             -Dproxy.name=${{ env.PROXY_NAME }} \
-            -Dbearer=${{ needs.build.outputs.output1 }} -e -X
+            -Dbearer=${{ needs.build.outputs.access_token }} -e -X
 
       - name: Verify deployment status
         run: |
