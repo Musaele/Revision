@@ -89,6 +89,10 @@ jobs:
           echo "Access token at stage deploy: $access_token"
           echo "Stable revision at stage deploy: $stable_revision_number"
 
+      - name: Echo access token
+        run: |
+          echo "Access token before Maven build and deploy: $access_token"
+
       - name: Verify POM file path
         run: |
           echo "Verifying POM file path..."
@@ -99,7 +103,7 @@ jobs:
           mvn clean install -f ${{ github.workspace }}/test-call/pom.xml \
             -Dorg=${{ secrets.ORG }} \
             -Dapigee.environment=${{ secrets.APIGEE_ENVIRONMENT }} \
-            -Dproxy.name=${{ secrets.PROXY_NAME }}
+            -Dproxy.name=${{ secrets.PROXY_NAME }} -e -X
 
       - name: Verify deployment status
         run: |
