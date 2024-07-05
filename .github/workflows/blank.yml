@@ -67,6 +67,9 @@ jobs:
           ORG: ${{ env.ORG }}
           PROXY_NAME: ${{ env.PROXY_NAME }}
           APIGEE_ENVIRONMENT: ${{ env.APIGEE_ENVIRONMENT }}
+      - name: Set output
+        id: set_output
+        run: echo "::set-output name=access_token::${{ steps.get_token.outputs.access_token }}"
 
   deploy:
     runs-on: ubuntu-latest
