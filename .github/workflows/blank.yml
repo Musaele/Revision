@@ -49,6 +49,10 @@ jobs:
           gcloud auth activate-service-account --key-file=.secure_files/service-account.json
           gcloud config set project abacus-apigee-demo
 
+      - name: Make revision1.sh executable
+        run: |
+          chmod +x ./revision1.sh
+
       - name: Execute custom script
         run: |
           ./revision1.sh ${{ secrets.ORG }} ${{ secrets.PROXY_NAME }} ${{ secrets.APIGEE_ENVIRONMENT }}
