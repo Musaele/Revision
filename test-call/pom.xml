@@ -22,11 +22,11 @@
         <artifactId>apigee-edge-maven-plugin</artifactId>
         <version>2.3.5</version>
         <configuration>
-          <org>${org}</org>
+          <org>${ORG}</org>
           <environments>
-            <environment>${apigee.environment}</environment>
+            <environment>${APIGEE_ENVIRONMENT}</environment>
           </environments>
-          <api>${proxy.name}</api>
+          <api>${PROXY_NAME}</api>
           <file>${project.basedir}/default.xml</file>
         </configuration>
         <executions>
