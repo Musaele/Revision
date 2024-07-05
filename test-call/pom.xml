@@ -15,30 +15,31 @@
   <name>test-call</name>
   <packaging>pom</packaging>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>io.apigee.build-tools.enterprise4g</groupId>
-        <artifactId>apigee-edge-maven-plugin</artifactId>
-        <version>2.3.5</version>
-        <configuration>
-          <org>${ORG}</org>
-          <environments>
-            <environment>${APIGEE_ENVIRONMENT}</environment>
-          </environments>
-          <api>${PROXY_NAME}</api>
-          <file>${project.basedir}/default.xml</file>
-        </configuration>
-        <executions>
-          <execution>
-            <id>configure-bundle</id>
-            <phase>package</phase>
-            <goals>
-              <goal>configure</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-</project>
+<build>
+  <plugins>
+    <plugin>
+      <groupId>io.apigee.build-tools.enterprise4g</groupId>
+      <artifactId>apigee-edge-maven-plugin</artifactId>
+      <version>2.3.5</version>
+      <configuration>
+        <org>${org}</org>
+        <environments>
+          <environment>${apigee.environment}</environment>
+        </environments>
+        <api>${proxy.name}</api>
+        <file>${project.basedir}/default.xml</file>
+        <bearer>${bearer}</bearer>
+      </configuration>
+      <executions>
+        <execution>
+          <id>configure-bundle</id>
+          <phase>package</phase>
+          <goals>
+            <goal>configure</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+  </plugins>
+</build>
+
