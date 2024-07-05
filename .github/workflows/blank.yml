@@ -77,10 +77,12 @@ jobs:
       - name: Echo Output  
         run: echo "access_token=${{needs.build.outputs.output1}}" >> $GITHUB_ENV
 
+      # Commented out block starts here
       #- name: List directory contents
-        #run: |
-          #ls -al ${{ github.workspace }}
-          #ls -al ${{ github.workspace }}/test-call
+      #  run: |
+      #    ls -al ${{ github.workspace }}
+      #    ls -al ${{ github.workspace }}/test-call
+      # Commented out block ends here
 
       - name: Maven build and deploy
         run: |
