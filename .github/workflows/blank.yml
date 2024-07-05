@@ -86,10 +86,10 @@ jobs:
           echo "APIGEE_ENVIRONMENT: ${{ env.APIGEE_ENVIRONMENT }}"
           echo "Access token: ${{ needs.build.outputs.access_token }}"
 
-      - name: List root directory contents
-        run: |
-          ls -al ${{ github.workspace }}
-          ls -al ${{ github.workspace }}/test-call
+      #- name: List root directory contents
+        #run: |
+          #ls -al ${{ github.workspace }}
+          #ls -al ${{ github.workspace }}/test-call
 
       - name: Maven build and deploy
         run: |
