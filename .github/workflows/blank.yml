@@ -21,7 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: List root directory contents
+      - name: List root directory contents after checkout
         run: |
           ls -al ${{ github.workspace }}
 
